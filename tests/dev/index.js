@@ -1,16 +1,14 @@
-const {createService} = require('../../lib');
+const {createServer} = require('../../lib');
 const { APPLICATION_LOG_LEVEL } = process.env;
 
 const config = {
+  serverConfig: {
+    server: {　port: 8123 }
+  },
   loggerConfig: {
     level: APPLICATION_LOG_LEVEL,
   }
 };
 
-const logger = createService(config);
-
-// logger.info({
-//   message:"info test message",
-//   correlationId: "123435",
-//   data: { hello:"world" }
-// });
+createServer(config)
+.then(server => server.start());

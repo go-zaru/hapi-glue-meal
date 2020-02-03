@@ -1,32 +1,35 @@
 // Generic example types; derived from acutal usage
+import { Server } from '@hapi/hapi';
+import { Logger } from '@gozaru/logger';
+
 export type StaticData = string | boolean | number | undefined;
 
-export type AnyData = StaticData | object;
+export type AnyData = StaticData | Object;
 
 export interface OptionalData {
   [key:string]: AnyData | AnyData[];
 }
 
-
-export interface RequiredConfig {
-  name:string;
+export interface ServiceDependencies {
+  server: Server;
+  logger: Logger;
 }
 
-export interface OptionalConfig {
-  options?: AnyData[];
+export interface Plugin {
+  pluign: string,
+  options?:{ [key:string]:any };
+  routes?:{ prefix:string }
 }
-
-export interface ComposedConfig
-  extends RequiredConfig, OptionalConfig, OptionalData {}
 
 export interface ServiceConfig extends OptionalData {
-  nameOfConfig: ComposedConfig;
+  serverConfig: {
+    server: { port: number }
+    plugins?:Plugin[]
+  };
+  loggerConfig: Object
 }
 
-export interface ServiceDependencies {}
-
-export interface ServiceConstructor {
-  new (depenendcies:ServiceDependencies):Service;
+export interface ServerService {
+  start(): Promise<void>;
+  stop(): Promise<void>;
 }
-export interface Service {}
-
